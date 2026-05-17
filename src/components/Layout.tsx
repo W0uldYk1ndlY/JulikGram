@@ -1,10 +1,19 @@
 import { Outlet, useNavigate, useLocation, Navigate } from 'react-router-dom';
-import { Home, Search, PlusSquare, Heart, User, ShieldAlert, CheckCircle2 } from 'lucide-react';
+import { Home, Search, PlusSquare, Heart, User, ShieldAlert, CheckCircle2, BellRing } from 'lucide-react';
 import { useAppContext } from '../App';
 import { mockCandidates } from '../data';
 import { motion, AnimatePresence } from 'motion/react';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import type { CandidateVerdict } from '../store';
+
+const FAKE_PUSHES = [
+  { title: "Майор Доигралес", body: "Срочно зайди ко мне в кабинет! Есть разговор." },
+  { title: "Система СКАТ", body: "⚠️ Зафиксирован подозрительный перевод 15 руб. на Кипр." },
+  { title: "Жена", body: "Купи хлеб, молоко и не забудь забрать ребенка с карате!" },
+  { title: "Бухгалтерия", body: "Где Ваш авансовый отчет за март?! Жду до 14:00!" },
+  { title: "Служба безопасности", body: "Кто-то пытался зайти под вашей учеткой с IP 192.168.0.1 (Чайник Xiaomi)." },
+  { title: "Анонимка", body: "Жулики не дремлют, держи ухо востро." }
+];
 
 export default function Layout() {
   const { officerName, verdicts, setVerdict } = useAppContext();
@@ -12,6 +21,26 @@ export default function Layout() {
   const location = useLocation();
 
   const [showAgentAlert, setShowAgentAlert] = useState(false);
+  const [pushNotification, setPushNotification] = useState<{title: string, body: string} | null>(null);
+
+  useEffect(() => {
+    // Random fake push notifications
+    if (!officerName) return;
+    
+    const interval = setInterval(() => {
+      // 30% chance every 15 seconds to show a push
+      if (Math.random() < 0.3) {
+        const randomPush = FAKE_PUSHES[Math.floor(Math.random() * FAKE_PUSHES.length)];
+        setPushNotification(randomPush);
+        
+        setTimeout(() => {
+          setPushNotification(null);
+        }, 5000); // Hide after 5s
+      }
+    }, 15000);
+
+    return () => clearInterval(interval);
+  }, [officerName]);
 
   if (!officerName) {
     return <Navigate to="/login" replace />;
@@ -154,6 +183,41 @@ export default function Layout() {
           </div>
         )}
       </AnimatePresence>
+
+      {/* Fake Push Notifications System */}
+      <div className="fixed top-20 left-1/2 -translate-x-1/2 z-[150] w-[90%] max-w-sm pointer-events-none">
+        <AnimatePresence>
+          {pushNotification && (
+            <motion.div
+              initial={{ opacity: 0, y: -50, scale: 0.9 }}
+              animate={{ opacity: 1, y: 0, scale: 1 }}
+              exit={{ opacity: 0, y: -20, scale: 0.9 }}
+              transition={{ type: 'spring', damping: 20, stiffness: 300 }}
+              className="bg-neutral-900/95 backdrop-blur-md border-l-4 border-l-green-500 shadow-2xl rounded-r shadow-black/50 overflow-hidden pointer-events-auto"
+              onClick={() => setPushNotification(null)}
+            >
+              <div className="p-3 flex items-start gap-3">
+                <div className="bg-neutral-800 p-2 rounded-full mt-1 shrink-0">
+                  <BellRing className="w-4 h-4 text-green-400" />
+                </div>
+                <div>
+                  <h4 className="text-white font-bold text-sm tracking-wide">{pushNotification.title}</h4>
+                  <p className="text-neutral-300 text-xs mt-1 leading-snug">{pushNotification.body}</p>
+                </div>
+              </div>
+              <div className="h-0.5 bg-neutral-800 w-full overflow-hidden">
+                <motion.div 
+                  initial={{ width: '100%' }}
+                  animate={{ width: 0 }}
+                  transition={{ duration: 5, ease: 'linear' }}
+                  className="h-full bg-green-500"
+                />
+              </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
+      </div>
+
     </div>
   );
 }

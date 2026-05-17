@@ -14,6 +14,50 @@ export interface Post {
   comments: Comment[];
 }
 
+export interface DmMessage {
+  id: string;
+  text: string;
+  isOutgoing: boolean;
+  time: string;
+}
+
+export interface DmChat {
+  contactName: string;
+  messages: DmMessage[];
+}
+
+export interface DatingProfile {
+  appName: string;
+  name: string;
+  age: number;
+  bio: string;
+}
+
+export interface PurchaseHistory {
+  store: string;
+  items: string[];
+}
+
+export interface SmartHomeRecord {
+  device: string;
+  command: string;
+  time: string;
+}
+
+export interface Geolocation {
+  lat: number;
+  lng: number;
+  placeName: string;
+  mapImageUrl: string;
+}
+
+export interface CallTranscript {
+  caller: string;
+  receiver: string;
+  duration: string;
+  text: string[];
+}
+
 export interface Candidate {
   id: string;
   username: string;
@@ -26,6 +70,13 @@ export interface Candidate {
   status: CandidateStatus;
   appliedPosition: string;
   osintInfo: string[];
+  dms: DmChat;
+  datingProfile?: DatingProfile;
+  purchases?: PurchaseHistory;
+  smartHomeRecords?: SmartHomeRecord[];
+  searchHistory?: string[];
+  geolocation?: Geolocation;
+  callTranscript?: CallTranscript;
 }
 
 export interface FakeAd {
@@ -60,7 +111,7 @@ export const mockCandidates: Candidate[] = [
     fullName: 'Игорь Нагибаторов',
     bio: '👾 Взламываю пентагон до обеда. 👨‍💻 Кали линукс в крови. 🕶️ Анонимус.',
     appliedPosition: 'Специалист по инфобезу',
-    avatarUrl: 'https://images.unsplash.com/photo-1526304640581-d334cdbbf45e?auto=format&fit=crop&q=80&w=200',
+    avatarUrl: 'https://images.unsplash.com/photo-1563203369-26f2e4a5ccf7?auto=format&fit=crop&q=80&w=200',
     followers: 1337,
     following: 4,
     status: 'PENDING',
@@ -71,6 +122,51 @@ export const mockCandidates: Candidate[] = [
       "Найдены запросы: 'скачать читы на майнкрафт без смс', 'как удалить амиго браузер', 'статья УК РФ за оскорбление в доте'",
       "> Уровень реальной угрозы: Опасен только для маминых нервов."
     ],
+    dms: {
+      contactName: 'Dark_Killah_99',
+      messages: [
+        { id: 'm1_1', text: 'Бро, когда пентагон ломаем?', isOutgoing: false, time: '14:20' },
+        { id: 'm1_2', text: 'Завтра после 4. У меня до 3 уроки, потом мама суп заставляет есть.', isOutgoing: true, time: '14:25' },
+        { id: 'm1_3', text: 'Понял, я тогда пока вирусы на флешку скачаю.', isOutgoing: false, time: '14:26' },
+        { id: 'm1_4', text: 'Только аккуратно, в архиве скидывай, а то у меня Касперский ругается сразу.', isOutgoing: true, time: '14:28' }
+      ]
+    },
+    datingProfile: {
+      appName: 'Tinder',
+      name: 'CyberLord',
+      age: 19,
+      bio: 'Ищу ту, кто взломает мое сердце. Девушки младше 70 лвла в WoW не пишите.'
+    },
+    purchases: {
+      store: 'Ozon',
+      items: ['Энергетик Tornado 24 шт', 'Маска Гая Фокса', 'Мазь от прыщей', 'Клавиатура с подсветкой']
+    },
+    smartHomeRecords: [
+      { device: 'Умная колонка Алиса', command: 'Алиса, как незаметно взять деньги из маминой сумки?', time: '12:00' },
+      { device: 'Умная колонка Алиса', command: 'Алиса, какие статьи за взлом странички ВК бывшей?', time: '14:30' }
+    ],
+    searchHistory: [
+      'скачать читы на майнкрафт без смс',
+      'как удалить амиго браузер',
+      'статья УК РФ за оскорбление в доте'
+    ],
+    geolocation: {
+      lat: 55.751244,
+      lng: 37.618423,
+      placeName: "Компьютерный клуб 'Матрица', Подвал",
+      mapImageUrl: "https://images.unsplash.com/photo-1524661135-423995f22d0b?auto=format&fit=crop&q=80&w=400",
+    },
+    callTranscript: {
+      caller: "Неизвестный",
+      receiver: "Кандидат",
+      duration: "00:01:15",
+      text: [
+        "[Неизвестный]: Алло, это штаб хакеров?",
+        "[Кандидат]: Да, мы слушаем. Пароль?",
+        "[Неизвестный]: Сын, кончай ерундой страдать, иди суп ешь!",
+        "[Кандидат]: МАМА! Я на спецоперации в Даркнете, ну мам!"
+      ]
+    },
     posts: [
       {
         id: 'p1_1',
@@ -112,6 +208,51 @@ export const mockCandidates: Candidate[] = [
       "'как переписать машину на кота', 'турция без загранпаспорта'",
       "> Статус: Классический мамин бизнесмен."
     ],
+    dms: {
+      contactName: 'Братуха (не брать!)',
+      messages: [
+        { id: 'm2_1', text: 'Жека, ты где? Трубку возьми, люди подъехали.', isOutgoing: false, time: '21:05' },
+        { id: 'm2_2', text: 'Брат, связь плохая, я в тоннеле.', isOutgoing: true, time: '21:15' },
+        { id: 'm2_3', text: 'Ты в телеге онлайн, какой еще тоннель? Верни 500 тысяч!', isOutgoing: false, time: '21:16' },
+        { id: 'm2_4', text: 'Автоответчик: Абонент временно покинул страну и в данный момент медитирует на Бали.', isOutgoing: true, time: '21:18' }
+      ]
+    },
+    datingProfile: {
+      appName: 'ДайВинчик',
+      name: 'Евгений',
+      age: 35,
+      bio: 'Решаю вопросики. На гелике. Сплю с пушкой. Если ты меркантильная - мимо.'
+    },
+    purchases: {
+      store: 'Wildberries',
+      items: ['Барсетка Gucci (реплика AAAA+)', 'Четки перекидные', 'Фальшивые купюры 5000 руб (для пранков)']
+    },
+    smartHomeRecords: [
+      { device: 'Умная колонка Маруся', command: 'Маруся, где спрятаться в лесу от кредиторов?', time: '03:00' },
+      { device: 'Робот-пылесос', command: '*ЗВУКИ УБЕГАЮЩЕГО ЧЕЛОВЕКА ПРИ ВИДЕ ПОЛИЦЕЙСКОЙ СИРЕНЫ*', time: '05:00' }
+    ],
+    searchHistory: [
+      'как переписать машину на кота',
+      'турция без загранпаспорта'
+    ],
+    geolocation: {
+      lat: 51.660781,
+      lng: 39.200296,
+      placeName: "Трасса М4 'Дон', лесополоса",
+      mapImageUrl: "https://images.unsplash.com/photo-1440613905118-99b921706b5c?auto=format&fit=crop&q=80&w=400",
+    },
+    callTranscript: {
+      caller: "Кандидат",
+      receiver: "Санёк",
+      duration: "00:02:40",
+      text: [
+        "[Кандидат]: Санёк, ты лопату взял?",
+        "[Санёк]: Взял. А что закапывать будем? Отчетность за квартал?",
+        "[Кандидат]: Концы в воду будем закапывать, Санёк. И флешку бухгалтера.",
+        "[Санёк]: А ящик виски тоже закапывать?",
+        "[Кандидат]: Нет, это вещдок, заберем в офис."
+      ]
+    },
     posts: [
       {
         id: 'p2_1',
@@ -153,10 +294,55 @@ export const mockCandidates: Candidate[] = [
       "- Курсы 'Дыхание маткой для привлечения инвестиций': 150 000 руб.",
       "> Баланс криптокошелька: 0.000000041 BTC ($0.03)"
     ],
+    dms: {
+      contactName: 'Микрозайм "БыстроДеньги"',
+      messages: [
+        { id: 'm3_1', text: 'Светлана Эдуардовна, вы просрочили платеж. Долг 14 500 рублей.', isOutgoing: false, time: '10:00' },
+        { id: 'm3_2', text: 'Ой, а можно я вам биткоинами заплачу? У меня там перспективный токен DOGE-SUPER-MOON 🚀', isOutgoing: true, time: '10:05' },
+        { id: 'm3_3', text: 'Мы принимаем только рубли. Завтра ваше дело передается коллекторам.', isOutgoing: false, time: '10:08' },
+        { id: 'm3_4', text: 'Вы просто не мыслите масштабно! Финансовая грамотность на нуле 💅 Отправляйте коллекторов, я им тоже курс продам.', isOutgoing: true, time: '10:12' }
+      ]
+    },
+    datingProfile: {
+      appName: 'Tinder',
+      name: 'Светлана',
+      age: 25,
+      bio: 'Миллионерша. Зарабатываю сама. Ищу папика, который оплатит мои бизнес-курсы.'
+    },
+    purchases: {
+      store: 'ЦУМ (Отмененные заказы)',
+      items: ['Сумка Birkin (Отклонено банком)', 'Туфли Louboutin (Недостаточно средств)']
+    },
+    smartHomeRecords: [
+      { device: 'Умная колонка Алиса', command: 'Алиса, включи медитацию на привлечение денег', time: '09:00' },
+      { device: 'Умная колонка Алиса', command: 'Алиса, как быстро продать почку?', time: '23:00' }
+    ],
+    searchHistory: [
+      'что делать если приставы уже стучат',
+      'как незаметно взять кредит на подругу'
+    ],
+    geolocation: {
+      lat: 55.748530,
+      lng: 37.538528,
+      placeName: "Москва-Сити (Фейк-локация), Распознана реальная: гаражный кооператив 'Ласточка'",
+      mapImageUrl: "https://images.unsplash.com/photo-1627883267798-25fc250e7042?auto=format&fit=crop&q=80&w=400",
+    },
+    callTranscript: {
+      caller: "«Служба безопасности банка» (Мошенник)",
+      receiver: "Кандидат",
+      duration: "00:15:22",
+      text: [
+        "[Мошенник]: Здравствуйте, кто-то пытается перевести ваши средства. Продиктуйте код из СМС.",
+        "[Кандидат]: Ой, какой ужас! 4452.",
+        "[Мошенник]: Отлично, теперь возьмите кредит на 2 миллиона, чтобы запутать следы.",
+        "[Кандидат]: А это точно безопасно? Хорошо, беру. А я так смогу стать крипто-инвестором?",
+        "[Мошенник]: Безусловно, Светлана. Вы теперь наш главный крипто-партнер."
+      ]
+    },
     posts: [
       {
         id: 'p3_1',
-        imageUrl: 'https://images.unsplash.com/photo-1621504450181-5d356f61d307?auto=format&fit=crop&q=80&w=800',
+        imageUrl: 'https://images.unsplash.com/photo-1518135714426-c18f5ffb6f4d?auto=format&fit=crop&q=80&w=800',
         caption: 'Ура! Купила первый холодный кошелек! Теперь моя крипта в безопасности 🔒✨',
         likes: 1205,
         comments: [
@@ -194,6 +380,51 @@ export const mockCandidates: Candidate[] = [
       "'Офшоры на Кипре недорого', 'как незаметно подкрутить формулу в Excel', 'билеты в Дубай на сегодня'",
       "> Вердикт: Очень скользкий тип."
     ],
+    dms: {
+      contactName: 'Бухгалтер Людмила',
+      messages: [
+        { id: 'm4_1', text: 'Кирилл Борисович, мы нашли несостыковки в 300 тысяч по вашему проекту "канцтовары".', isOutgoing: false, time: '16:30' },
+        { id: 'm4_2', text: 'Людмила Ивановна, ну зачем же так официально. Давайте я вам коробку хороших конфет куплю и мы это забудем? 😉', isOutgoing: true, time: '16:35' },
+        { id: 'm4_3', text: 'Вы вчера грузили 15 коробок бумаги А4 в свой багажник. У нас есть камеры.', isOutgoing: false, time: '16:38' },
+        { id: 'm4_4', text: 'Это... эээ... процесс безопасной утилизации! Конфиденциальные данные! Завтра все объясню.', isOutgoing: true, time: '16:40' }
+      ]
+    },
+    datingProfile: {
+      appName: 'Tinder',
+      name: 'Кирилл',
+      age: 32,
+      bio: 'Топ-менеджер. Отдыхаю на Мальдивах. Счет разделим пополам. Чаевые не оставляю принципиально.'
+    },
+    purchases: {
+      store: 'АлиЭкспресс',
+      items: ['Часы Rolex (подделка $15)', 'Галстук шелковый (1 шт)', 'Программа для накрутки KPI']
+    },
+    smartHomeRecords: [
+      { device: 'Умная колонка Алиса', command: 'Алиса, что делать если налоговая у дверей?', time: '10:00' },
+      { device: 'Умный чайник', command: '*Шепотом* Как подделать подпись гендира?', time: '16:00' }
+    ],
+    searchHistory: [
+      'Офшоры на Кипре недорого',
+      'как незаметно подкрутить формулу в Excel',
+      'билеты в Дубай на сегодня'
+    ],
+    geolocation: {
+      lat: 55.972620,
+      lng: 37.414594,
+      placeName: "Аэропорт Шереметьево, Зона вылета (Пытается покинуть РФ)",
+      mapImageUrl: "https://images.unsplash.com/photo-1436491865332-7a61e109cc05?auto=format&fit=crop&q=80&w=400",
+    },
+    callTranscript: {
+      caller: "Генеральный директор",
+      receiver: "Кандидат",
+      duration: "00:00:45",
+      text: [
+        "[Директор]: Кирилл Борисович, вы где? Нам нужно обсудить пропажу 10 миллионов из бюджета.",
+        "[Кандидат]: Иван Иванович, я на срочном тимбилдинге! В... эээ... Саратове. Связь плохая!",
+        "[Директор]: У вас на фоне объявляют рейс на Дубай.",
+        "[Кандидат]: Это... аудио-погружение для лучшей концентрации! *пищит терминал, связь обрывается*"
+      ]
+    },
     posts: [
       {
         id: 'p4_1',

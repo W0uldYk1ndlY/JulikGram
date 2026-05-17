@@ -1,11 +1,12 @@
 import { useNavigate } from 'react-router-dom';
-import { Heart, MessageCircle, Send, Bookmark, MoreHorizontal, ExternalLink } from 'lucide-react';
+import { Heart, MessageCircle, Send, Bookmark, MoreHorizontal, ExternalLink, Search } from 'lucide-react';
 import { mockCandidates, mockAds } from '../data';
 import { useState, useMemo } from 'react';
 
 export default function Feed() {
   const navigate = useNavigate();
   const [likedPosts, setLikedPosts] = useState<Set<string>>(new Set());
+  const [magnifier, setMagnifier] = useState<{ id: string, x: number, y: number } | null>(null);
 
   // Flatten posts from all candidates into a single feed, insert ads
   const feedItems = useMemo(() => {
@@ -33,6 +34,15 @@ export default function Feed() {
     });
   };
 
+  const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>, postId: string) => {
+    const { left, top, width, height } = e.currentTarget.getBoundingClientRect();
+    const x = ((e.clientX - left) / width) * 100;
+    const y = ((e.clientY - top) / height) * 100;
+    setMagnifier({ id: postId, x, y });
+  };
+
+  const handleMouseLeave = () => setMagnifier(null);
+
   return (
     <div className="pb-8">
       {/* Stories mock */}
@@ -59,7 +69,7 @@ export default function Feed() {
                   </div>
                 </div>
                 <div className="aspect-video bg-gray-100 flex items-center justify-center relative overflow-hidden group">
-                  <img src={ad.imageUrl} alt="ad" className="w-full h-full object-cover" />
+                  <img src={ad.imageUrl} alt="ad" className="w-full h-full object-cover relative z-0" />
                 </div>
                 <div className="p-3">
                   <div className="flex justify-between items-center mb-2">
@@ -77,10 +87,12 @@ export default function Feed() {
 
           const post = item.data;
           const isLiked = likedPosts.has(post.id);
+          const isMagnified = magnifier?.id === post.id;
+
           return (
-            <article key={post.id} className="bg-white">
+            <article key={post.id} className="bg-white relative">
               {/* Post Header */}
-              <div className="flex items-center justify-between p-3">
+              <div className="flex items-center justify-between p-3 relative z-10">
                 <div 
                   className="flex items-center gap-3 cursor-pointer group"
                   onClick={() => navigate(`/profile/${post.candidate.id}`)}
@@ -91,20 +103,45 @@ export default function Feed() {
                 <button className="text-gray-500"><MoreHorizontal className="w-5 h-5" /></button>
               </div>
 
-              {/* Post Image */}
-              <div className="aspect-square bg-gray-100 flex items-center justify-center relative overflow-hidden group">
-                <img src={post.imageUrl} alt="post" className="w-full h-full object-cover" />
+              {/* Post Image with Magnifier Tool */}
+              <div 
+                className="aspect-square bg-gray-100 relative overflow-hidden group cursor-crosshair"
+                onMouseMove={(e) => handleMouseMove(e, post.id)}
+                onMouseLeave={handleMouseLeave}
+              >
+                <img src={post.imageUrl} alt="post" className="w-full h-full object-cover absolute inset-0 z-0" />
                 
+                {isMagnified && (
+                  <div 
+                    className="absolute pointer-events-none rounded-full w-32 h-32 border-4 border-green-500 shadow-[0_0_15px_rgba(0,0,0,0.5)] z-20 flex items-center justify-center bg-gray-200"
+                    style={{
+                      left: `calc(${magnifier.x}% - 64px)`,
+                      top: `calc(${magnifier.y}% - 64px)`,
+                      backgroundImage: `url(${post.imageUrl})`,
+                      backgroundPosition: `${magnifier.x}% ${magnifier.y}%`,
+                      backgroundSize: '250%' // Zoom level
+                    }}
+                  >
+                    <div className="w-1 h-1 bg-green-500 rounded-full z-30 absolute"></div>
+                    <div className="absolute top-1 right-2 text-green-500 font-mono text-[8px] font-bold bg-black/50 px-1 rounded">X2.5</div>
+                  </div>
+                )}
+                
+                {/* Instruction overlay for magnifier */}
+                <div className="absolute top-2 right-2 p-1.5 bg-black/50 text-white rounded-full opacity-50 group-hover:opacity-100 transition-opacity z-10">
+                   <Search className="w-4 h-4" />
+                </div>
+
                 {/* Visual joke "hint" for the friend (Security Officer) */}
-                <div className="absolute inset-x-0 bottom-0 p-4 bg-gradient-to-t from-black/80 to-transparent opacity-0 group-hover:opacity-100 transition-opacity">
-                  <div className="bg-red-500/90 text-white text-xs p-2 rounded inline-block font-mono font-bold animate-pulse">
-                    ⚠️ СБ АНАЛИЗ: Обратите внимание на детали фото и комментарии
+                <div className="absolute inset-x-0 bottom-0 p-4 bg-gradient-to-t from-black/80 to-transparent opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none z-10">
+                  <div className="bg-red-500/90 text-white text-xs p-2 rounded inline-block font-mono font-bold animate-pulse shadow-lg backdrop-blur-sm">
+                    ⚠️ Используйте лупу на фото, чтобы найти улики
                   </div>
                 </div>
               </div>
 
               {/* Post Actions */}
-              <div className="p-3">
+              <div className="p-3 relative z-10">
                 <div className="flex justify-between items-center mb-3">
                   <div className="flex items-center gap-4">
                     <button onClick={() => toggleLike(post.id)}>

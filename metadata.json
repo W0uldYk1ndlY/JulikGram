@@ -1,0 +1,6 @@
+{
+  "name": "OSINTgram",
+  "description": "Шуточный симулятор OSINT-специалиста. Социальная сеть для жуликов, где нужно находить компромат на 'кандидатов' и выносить вердикты.",
+  "requestFramePermissions": [],
+  "majorCapabilities": []
+}
